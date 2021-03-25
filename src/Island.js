@@ -28,3 +28,7 @@ function Island() {
 }
 
 export default Island;
+
+console.log('jean');
+
+console.log('prout');
