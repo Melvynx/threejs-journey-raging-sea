@@ -9,7 +9,7 @@ function Water({ gui, fog }) {
     surfaceColor: '#6ed2ff',
   };
 
-  const waterGeometry = new THREE.PlaneGeometry(6, 6, 512, 512);
+  const waterGeometry = new THREE.PlaneGeometry(20, 20, 512, 512);
 
   // Material
   const waterMaterial = new THREE.ShaderMaterial({
