@@ -9,6 +9,7 @@ import { useRequestAnimationFrame } from './utility';
 import Alien from './Alien';
 
 export const gltfLoader = new GLTFLoader();
+export const cubeTextureLoader = new THREE.CubeTextureLoader();
 export const textureLoader = new THREE.TextureLoader();
 
 /**
@@ -25,9 +26,20 @@ fog.near = 0;
 fog.far = 8;
 fog.color.set('#414141');
 
+const environmentMap = cubeTextureLoader.load([
+  '/textures/cube/px.png',
+  '/textures/cube/nx.png',
+  '/textures/cube/py.png',
+  '/textures/cube/ny.png',
+  '/textures/cube/pz.png',
+  '/textures/cube/nz.png',
+]);
+
 // Scene
 const scene = new THREE.Scene();
 scene.fog = fog;
+scene.environment = environmentMap;
+scene.background = environmentMap;
 
 /**
  * Light
@@ -40,7 +52,7 @@ const directionalLight = new THREE.DirectionalLight('#ffffff', 0.2);
 directionalLight.position.set(1, 2, 1);
 scene.add(directionalLight);
 
-const directionalLightBig = new THREE.DirectionalLight('#f0f0f0', 0.7, 10);
+const directionalLightBig = new THREE.DirectionalLight('#f0f0f0', 1, 10);
 
 directionalLightBig.position.set(-3, 2, 2);
 directionalLightBig.castShadow = true;
@@ -56,24 +68,16 @@ scene.add(directionalLightBig);
  * Boat
  */
 gltfLoader.load('models/Tree.glb', (gltf) => {
-  console.log(gltf.scene.children[0].children);
   scene.add(gltf.scene);
-  gltf.scene.castShadow = true;
   gltf.scene.children[0].children.forEach((child) => {
-    console.log(child.material);
     child.material.lightMapIntensity = 10;
     child.castShadow = true;
   });
+  gltf.scene.position.set(-0.05, 0, -0.05);
 });
 
-let alien = null;
-let onAlienActionClick = null;
-Alien(({ mesh, onActionClick }) => {
-  scene.add(mesh);
-  console.log('AAAAA', mesh);
-  alien = mesh;
-  onAlienActionClick = onActionClick;
-});
+const alien = new Alien({ scene, gui });
+
 /**
  * Water
  */
@@ -125,13 +129,21 @@ controls.enableDamping = true;
 /**
  * Renderer
  */
+
 const renderer = new THREE.WebGLRenderer({
+  antialias: true,
   canvas: canvas,
 });
+export { renderer };
+
 renderer.shadowMap.enabled = true;
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setClearColor('#414141');
+renderer.physicallyCorrectLights = true;
+renderer.outputEncoding = THREE.sRGBEncoding;
+renderer.toneMapping = THREE.CineonToneMapping;
+renderer.toneMappingExposure = 1.2;
 
 /**
  * Click
@@ -144,13 +156,14 @@ window.addEventListener('mousemove', (event) => {
 });
 
 const raycaster = new THREE.Raycaster();
-window.addEventListener('click', (event) => {
+window.addEventListener('click', () => {
   raycaster.setFromCamera(mouse, camera);
-  const x = alien.children[0].children.map((c) => c.children).flat();
+  const alienChildren = alien.mesh.children[0].children
+    .map((c) => c.children)
+    .flat();
 
-  if (raycaster.intersectObjects(x).length > 0) {
-    console.log('alien hit');
-    onAlienActionClick();
+  if (raycaster.intersectObjects(alienChildren).length > 0) {
+    alien.jump();
   }
 });
 

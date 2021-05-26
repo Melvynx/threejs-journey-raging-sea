@@ -28,3 +28,5 @@ function Island() {
 }
 
 export default Island;
+
+console.log('date');
