@@ -7,6 +7,8 @@ import Water from './Water';
 import Island from './Island';
 import { useRequestAnimationFrame } from './utility';
 import Alien from './Alien';
+import Trees from './Trees';
+import ThreeParticules from './ThreeParticules';
 
 export const gltfLoader = new GLTFLoader();
 export const cubeTextureLoader = new THREE.CubeTextureLoader();
@@ -67,30 +69,18 @@ scene.add(directionalLightBig);
 /**
  * Boat
  */
-gltfLoader.load('models/Tree.glb', (gltf) => {
-  scene.add(gltf.scene);
-  gltf.scene.children[0].children.forEach((child) => {
-    child.material.lightMapIntensity = 10;
-    child.castShadow = true;
-  });
-  gltf.scene.position.set(-0.05, 0, -0.05);
-});
-
-const alien = new Alien({ scene, gui });
 
 /**
  * Water
  */
 // Mesh
-const { mesh: water } = Water({ gui, fog: scene.fog });
-water.rotation.x = -Math.PI * 0.5;
-scene.add(water);
+const water = new Water({ scene, gui });
+water.mesh.rotation.x = -Math.PI * 0.5;
 
-const { mesh: island } = Island();
-island.position.y = -0.5;
-scene.add(island);
-
-// scene.add(island);
+const alien = new Alien({ scene, gui });
+new Island({ gui, scene });
+new Trees({ gui, scene });
+const threeParticules = new ThreeParticules({ gui, scene });
 
 /**
  * Sizes
@@ -112,6 +102,7 @@ window.addEventListener('resize', () => {
   // Update renderer
   renderer.setSize(sizes.width, sizes.height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  threeParticules.pixelRatio = renderer.getPixelRatio();
 });
 
 /**
@@ -139,6 +130,7 @@ export { renderer };
 renderer.shadowMap.enabled = true;
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+threeParticules.pixelRatio = renderer.getPixelRatio();
 renderer.setClearColor('#414141');
 renderer.physicallyCorrectLights = true;
 renderer.outputEncoding = THREE.sRGBEncoding;

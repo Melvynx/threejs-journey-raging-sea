@@ -36,7 +36,7 @@ class Alien {
       this._animations.breathe.play();
 
       alien.scale.set(0.1, 0.1, 0.1);
-      alien.position.set(0.2, 0.47, 0.2);
+      alien.position.set(0.2, 0.415, 0.2);
       alien.rotation.y = Math.PI * 0.25;
 
       alien.castShadow = true;
@@ -63,14 +63,13 @@ class Alien {
 
   jump() {
     if (!this._animations) return;
-    console.log('prout');
 
     const { breathe, jump } = this._animations;
 
     const particules = new AlienParticules({ scene: this.scene, gui: this.gui });
 
     if (this._isJump) return;
-    console.log('prout3', jump);
+
     this._isJump = true;
     breathe.stop();
     jump.play();
