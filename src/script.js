@@ -10,14 +10,16 @@ import Alien from './Alien';
 import Trees from './Trees';
 import Stats from 'stats.js';
 import ThreeParticules from './ThreeParticules';
+import LoadingOverlay from './LoadingOverlay';
 
 const stats = new Stats();
 stats.showPanel(0);
 window.document.body.appendChild(stats.dom);
 
-export const gltfLoader = new GLTFLoader();
-export const cubeTextureLoader = new THREE.CubeTextureLoader();
-export const textureLoader = new THREE.TextureLoader();
+const loadingManager = new THREE.LoadingManager();
+export const gltfLoader = new GLTFLoader(loadingManager);
+export const cubeTextureLoader = new THREE.CubeTextureLoader(loadingManager);
+export const textureLoader = new THREE.TextureLoader(loadingManager);
 
 /**
  * Base
@@ -47,6 +49,11 @@ const scene = new THREE.Scene();
 scene.fog = fog;
 scene.environment = environmentMap;
 scene.background = environmentMap;
+
+/**
+ * Overlay
+ */
+new LoadingOverlay({ scene, gui, loadingManager });
 
 /**
  * Light
@@ -154,6 +161,7 @@ window.addEventListener('mousemove', (event) => {
 
 const raycaster = new THREE.Raycaster();
 window.addEventListener('click', () => {
+  if (!alien.mesh.children[0]) return;
   raycaster.setFromCamera(mouse, camera);
   const alienChildren = alien.mesh.children[0].children
     .map((c) => c.children)

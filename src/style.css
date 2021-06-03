@@ -1,19 +1,50 @@
-*
-{
-    margin: 0;
-    padding: 0;
+* {
+  margin: 0;
+  padding: 0;
 }
 
 html,
-body
-{
-    overflow: hidden;
+body {
+  overflow: hidden;
+  background-color: #000000;
 }
 
-.webgl
-{
-    position: fixed;
-    top: 0;
-    left: 0;
-    outline: none;
+.webgl {
+  position: fixed;
+  top: 0;
+  left: 0;
+  outline: none;
+}
+
+.overlay {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  color: white;
+}
+
+.overlay > .centred {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.overlay > .centred > .percentBox {
+  border: 2px solid #ffffff;
+  width: 160px;
+  height: 32px;
+  margin-top: 8px;
+}
+
+.overlay > .centred > .percentBox > .percentBar {
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  transform: scaleX(0);
+  transform-origin: top left;
+  animation: transform 1s ease-in-out;
 }

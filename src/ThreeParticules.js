@@ -27,10 +27,6 @@ class ThreeParticules {
         }
       });
 
-    // gui
-    //   .add(this.parameters, 'count', 1, 1000000, 0.1)
-    //   .name('Alien particules count');
-
     this.init();
   }
 
