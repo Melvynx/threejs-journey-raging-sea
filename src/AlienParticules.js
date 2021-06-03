@@ -13,10 +13,6 @@ class AlienParticules {
     this.points = null;
     this.scene = scene;
 
-    // gui
-    //   .add(this.parameters, 'count', 1, 1000000, 0.1)
-    //   .name('Alien particules count');
-
     this.init();
   }
 
@@ -80,6 +76,12 @@ class AlienParticules {
     this.points.geometry.dispose();
     this.points.material.dispose();
     this.scene.remove(this.points);
+  }
+
+  disposeAsnyc(time) {
+    setTimeout(() => {
+      this.dispose();
+    }, time);
   }
 }
 

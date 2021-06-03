@@ -8,7 +8,12 @@ import Island from './Island';
 import { useRequestAnimationFrame } from './utility';
 import Alien from './Alien';
 import Trees from './Trees';
+import Stats from 'stats.js';
 import ThreeParticules from './ThreeParticules';
+
+const stats = new Stats();
+stats.showPanel(0);
+window.document.body.appendChild(stats.dom);
 
 export const gltfLoader = new GLTFLoader();
 export const cubeTextureLoader = new THREE.CubeTextureLoader();
@@ -164,9 +169,12 @@ window.addEventListener('click', () => {
  */
 
 useRequestAnimationFrame(() => {
+  stats.begin();
   // Update controls
   controls.update();
 
   // Render
   renderer.render(scene, camera);
+
+  stats.end();
 });

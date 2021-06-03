@@ -61,8 +61,10 @@ class Water {
 
   destroy() {
     this.stopTick();
-    this.mesh.remove();
     this.mesh.material.dispose();
+    this.mesh.geometry.dispose();
+    this.scene.remove(this.mesh);
+    this.mesh.remove();
   }
 
   addDebug() {

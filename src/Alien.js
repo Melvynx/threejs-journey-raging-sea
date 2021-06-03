@@ -66,9 +66,9 @@ class Alien {
 
     const { breathe, jump } = this._animations;
 
-    const particules = new AlienParticules({ scene: this.scene, gui: this.gui });
-
     if (this._isJump) return;
+
+    const particules = new AlienParticules({ scene: this.scene, gui: this.gui });
 
     this._isJump = true;
     breathe.stop();
